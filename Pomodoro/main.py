@@ -20,15 +20,25 @@ window = Tk()
 window.title("Pomodoro Timer")
 window.config(padx=100, pady=50, bg=YELLOW)
 
+start_button = Button(text="Start")
+start_button.grid(column=0, row=2)
+
+timer_label = Label(text="Timer", font=("Arial", 35), fg=GREEN, bg=YELLOW)
+timer_label.grid(column=1, row=0)
+
+checkmark = Label(text="✓", font=("Arial", 15, "bold"), fg=GREEN, bg=YELLOW)
+checkmark.grid(column=1, row=3)
+
+reset_button = Button(text="Reset")
+reset_button.grid(column=2, row=2)
+
 image = PhotoImage(file="tomato.png")
 
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 canvas.create_image(100, 112, image=image)
 canvas.create_text(100, 130, text="00:00", fill="white", font=("Arial", 30, "bold"))
-canvas.pack()
+canvas.grid(column=1, row=1)
 
-# use fg
-# copy checkmark
-# use grid instead of pack
+
 
 window.mainloop()
