@@ -8,20 +8,54 @@ YELLOW = "#f7f5dd"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
+REPS = 0
 
 # ---------------------------- TIMER RESET ------------------------------- #
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 
-def start_timer():
-    countdown(5 * 60)
-
 def countdown(count):
     count_min = floor(count / 60)
     count_sec = count % 60
-    canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
+    timer_label_func(REPS)
+    if count_sec >= 10:
+        count_sec_final = count_sec
+    elif count_sec < 10:
+        count_sec_final = f"0{count_sec}"
+    canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec_final}")
     if count > 0:
         window.after(1000, countdown, count - 1)
+    elif count == 0:
+        start_timer()
+
+# def start_timer():
+#     # Test version that counts in seconds instead of minutes.
+#     global REPS
+#     REPS += 1
+#     if REPS % 8 == 0:
+#         countdown(LONG_BREAK_MIN)
+#     elif REPS % 2 == 0:
+#         countdown(SHORT_BREAK_MIN)
+#     elif REPS % 2 != 0:
+#         countdown(WORK_MIN)
+
+def start_timer():
+    global REPS
+    REPS += 1
+    if REPS % 8 == 0:
+        countdown(60 * LONG_BREAK_MIN)
+    elif REPS % 2 == 0:
+        countdown(60 * SHORT_BREAK_MIN)
+    elif REPS % 2 != 0:
+        countdown(60 * WORK_MIN)
+
+def timer_label_func(reps_count):
+    if reps_count % 8 == 0:
+        timer_label.config(text="Long break. Have some fun!", fg=RED)
+    elif reps_count % 2 == 0:
+        timer_label.config(text="Short break.", fg=PINK)
+    elif reps_count % 2 != 0:
+        timer_label.config(text="Work.", fg=GREEN)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
