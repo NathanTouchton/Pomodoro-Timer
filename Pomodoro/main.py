@@ -6,6 +6,9 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 WORK_MIN = 25
+# Uncomment the next line while testing with
+# the test version of start_timer so you don't have to wait 25 seconds
+# WORK_MIN = 7
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 REPS = 0
@@ -14,27 +17,29 @@ CHECKMARK = "✓"
 # ---------------------------- TIMER RESET ------------------------------- #
 
 def reset_timer():
-    global CHECKMARK
+    global CHECKMARK, REPS
     CHECKMARK = "✓"
+    checkmark_label.config(text=CHECKMARK)
     timer_label.config(text="Timer", fg=GREEN)
     canvas.itemconfig(timer_text, text="00:00")
+    REPS = 0
 
 # --------------------------- TIMER MECHANISM ------------------------------ #
 
 def countdown(count):
-    count_min = floor(count / 60)
-    count_sec = count % 60
-    timer_label_func(REPS)
-    if count_sec >= 10:
-        count_sec_final = count_sec
-    elif count_sec < 10:
-        count_sec_final = f"0{count_sec}"
-    canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec_final}")
-    if count > 0:
-        window.after(1000, countdown, count - 1)
-    elif count == 0:
-        add_checkmark()
-        start_timer()
+    if REPS != 0:
+        count_min = floor(count / 60)
+        count_sec = count % 60
+        timer_label_func(REPS)
+        if count_sec >= 10:
+            count_sec_final = count_sec
+        elif count_sec < 10:
+            count_sec_final = f"0{count_sec}"
+        canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec_final}")
+        if count > 0:
+            window.after(1000, countdown, count - 1)
+        elif count == 0:
+            start_timer()
 
 # def start_timer():
 #     # Test version that counts in seconds instead of minutes.
@@ -46,6 +51,8 @@ def countdown(count):
 #         countdown(SHORT_BREAK_MIN)
 #     elif REPS % 2 != 0:
 #         countdown(WORK_MIN)
+#         if REPS != 1:
+#             add_checkmark()
 
 def start_timer():
     global REPS
@@ -56,6 +63,8 @@ def start_timer():
         countdown(60 * SHORT_BREAK_MIN)
     elif REPS % 2 != 0:
         countdown(60 * WORK_MIN)
+        if REPS != 1:
+            add_checkmark()
 
 def timer_label_func(reps_count):
     if reps_count % 8 == 0:
@@ -68,6 +77,7 @@ def timer_label_func(reps_count):
 def add_checkmark():
     global CHECKMARK
     CHECKMARK += "✓"
+    checkmark_label.config(text=CHECKMARK)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
